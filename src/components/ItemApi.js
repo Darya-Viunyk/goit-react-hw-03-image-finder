@@ -1,46 +1,56 @@
-import axios from 'axios';
+import { Component } from 'react';
 
-export class ItemsApi {
-  page = 1;
-  value = '';
-  pageMax = 0;
+export default class ItemApi extends Component {
+  state = { query: null, loading: false, error: null };
+  componentDidUpdate(prevProps, prevState) {
+    const prevName = prevProps.query;
+    const nextName = this.props.query;
 
-  incrementPage() {
-    if (this.page < this.pageMax) this.page + 1;
+    if (prevName !== nextName) {
+      console.log('Change name');
+      this.setState({ loading: true, query: null });
+      fetch(
+        'https://pixabay.com/api/?q=${query}&page=1&key=30923283-33d2e606614da3e7093560986&image_type=${query}&orientation=horizontal&per_page=12'
+      )
+        .then(responce => {
+          if (responce.ok) {
+            return responce.json();
+          }
+          return Promise.reject(new Error(`Нет такого ${nextName}`));
+        })
+        .then(query => this.setState({ query }))
+        .catch(error => this.setState({ error }))
+        .finally(() => this.setState({ loading: false }));
+    }
   }
-
-  resetPage() {
-    this.page = 1;
-  }
-
-  isLastPage() {
-    return this.page >= this.pageMax;
-  }
-
-  async fetchItems(string) {
-    this.value = string ?? this.value;
-
-    const config = {
-      params: {
-        key: '30923283-33d2e606614da3e7093560986',
-        page: this.page,
-        per_page: 12,
-        q: this.value,
-        image_type: 'photo',
-      },
-    };
-
-    return await axios.get(`https://pixabay.com/api/`, config).then(res => {
-      this.pageMax = Math.ceil(res.data.totalHits / config.params.per_page);
-
-      if (res.data.totalHits === 0) {
-        throw new Error(
-          'Sorry, there are no images matching your search query. Please try again.'
-        );
-      }
-
-      return res;
-    });
+  render() {
+    return (
+      <div>
+        {this.state.error && <h1>{this.state.error.message}</h1>}
+        {this.state.loading && <div>Загружаем...</div>}
+        {!this.props.query && <div>Введите имя....</div>}
+        {this.state.query && (
+          <div>
+            <p>{this.state.query.hits.id}</p>
+            <img
+              src={this.state.query.hits.webformatUR}
+              alt={this.state.query}
+              width="640"
+            />
+            <img
+              src={this.state.query.hits.largeImageURL}
+              alt="Картинка"
+              width="4000"
+            />
+          </div>
+        )}
+      </div>
+    );
   }
 }
-export const ItemsApi = new ItemsApi();
+
+// export const getImages = async (query, page) => {
+//   const { data } = await axios.get(`search?query=${query}&page=${page}`);
+//   return data;
+// };
+// https://pixabay.com/api/?q=cat&page=1&key=your_key&image_type=photo&orientation=horizontal&per_page=12

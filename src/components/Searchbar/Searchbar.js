@@ -8,6 +8,10 @@ export class Searchbar extends Component {
   handleSubmit = event => {
     const { query } = this.state;
     event.preventDefault();
+    if (this.state.query.trim() === '') {
+      alert('This field cannot be empty, please enter a valid name');
+      return;
+    }
     this.props.onSubmit(query);
     this.setState({ query: '' });
   };
