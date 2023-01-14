@@ -1,7 +1,9 @@
-import { Component } from 'react';
-
-export class ImageGalleryItem extends Component {
-  render() {
-    return <div></div>;
-  }
-}
+export const ImageGalleryItem = ({ id }) => {
+  return (
+    <>
+      <li key={id}>
+        <img src="" alt="" />
+      </li>
+    </>
+  );
+};

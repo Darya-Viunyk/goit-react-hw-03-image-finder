@@ -30,7 +30,7 @@ export class App extends Component {
     try {
       const {
         photos,
-        totol,
+        total_results,
         per_page,
         page: currentPage,
       } = await ItemApi.getImages(query, page);
@@ -39,22 +39,26 @@ export class App extends Component {
       }
       this.setState(prevState => ({
         imeges: [...prevState.imeges, ...photos],
-        isVisBle: currentPage < Math.ceil(totol / per_page),
+        isVisBle: currentPage < Math.ceil(total_results / per_page),
       }));
     } catch (error) {
       console.log(error);
     }
   };
-
+  onButtonClick = () => {
+    this.setState(prevState => ({
+      page: prevState.page + 1,
+    }));
+  };
   render() {
-    // const { imeges } = this.state;
+    const { imeges } = this.state;
     return (
       <>
         <Searchbar onSubmit={this.onHandleSubmit} />
 
-        <ImageGallery />
+        <ImageGallery imeges={imeges} />
 
-        <Button />
+        <Button onClick={this.onButtonClick} />
       </>
     );
   }
