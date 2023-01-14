@@ -1,31 +1,60 @@
 import { Component } from 'react';
+import * as ItemApi from './ItemApi';
+import { Button } from './Button/Button';
 import { ImageGallery } from './ImageGallery/ImageGallery';
-import ItemApi from './ItemApi';
 import { Searchbar } from './Searchbar/Searchbar';
 
 export class App extends Component {
-  state = { query: '', page: 1 };
+  state = {
+    query: '',
+    page: 1,
+    imeges: [],
+    isVisBle: false,
+    isEmpty: false,
+  };
+
+  onHandleSubmit = value => {
+    this.setState({ query: value, page: 1, imeges: [], isEmpty: false });
+  };
+
   componentDidUpdate(prevProps, prevState) {
     const { query, page } = this.state;
     if (prevState.query !== query || prevState.page !== page) {
-      this.getPhotos(query, page);
+      this.getFotos(query, page);
     }
   }
-  getPhotos = async (query, page) => {
+  getFotos = async (query, page) => {
+    if (!query) {
+      return;
+    }
     try {
-      const data = await ItemApi.getImeges(query, page);
+      const {
+        photos,
+        totol,
+        per_page,
+        page: currentPage,
+      } = await ItemApi.getImages(query, page);
+      if (photos.length === 0) {
+        this.setState({ isEmpty: true });
+      }
+      this.setState(prevState => ({
+        imeges: [...prevState.imeges, ...photos],
+        isVisBle: currentPage < Math.ceil(totol / per_page),
+      }));
     } catch (error) {
       console.log(error);
     }
   };
-  onHandleSubmit = value => this.setState({ query: value });
+
   render() {
+    // const { imeges } = this.state;
     return (
       <>
         <Searchbar onSubmit={this.onHandleSubmit} />
-        <ItemApi query={this.state.query} />
 
         <ImageGallery />
+
+        <Button />
       </>
     );
   }
