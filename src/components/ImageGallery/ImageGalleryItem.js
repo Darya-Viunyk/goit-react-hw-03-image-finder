@@ -1,4 +1,4 @@
-export const ImageGalleryItem = ({ id }) => {
+export const ImageGalleryItem = ({ id, webformatURL, largeImageURL }) => {
   return (
     <>
       <li key={id}>

@@ -8,7 +8,7 @@ export class App extends Component {
   state = {
     query: '',
     page: 1,
-    imeges: [],
+    hits: [],
     isVisBle: false,
     isEmpty: false,
   };
@@ -24,26 +24,8 @@ export class App extends Component {
     }
   }
   getFotos = async (query, page) => {
-    if (!query) {
-      return;
-    }
-    try {
-      const {
-        photos,
-        total_results,
-        per_page,
-        page: currentPage,
-      } = await ItemApi.getImages(query, page);
-      if (photos.length === 0) {
-        this.setState({ isEmpty: true });
-      }
-      this.setState(prevState => ({
-        imeges: [...prevState.imeges, ...photos],
-        isVisBle: currentPage < Math.ceil(total_results / per_page),
-      }));
-    } catch (error) {
-      console.log(error);
-    }
+    const response = await ItemApi.getImages(query, page);
+    console.log(response);
   };
   onButtonClick = () => {
     this.setState(prevState => ({
@@ -51,12 +33,13 @@ export class App extends Component {
     }));
   };
   render() {
-    const { imeges } = this.state;
+    const { response } = this.state;
+
     return (
       <>
         <Searchbar onSubmit={this.onHandleSubmit} />
 
-        <ImageGallery imeges={imeges} />
+        <ImageGallery imeges={response} />
 
         <Button onClick={this.onButtonClick} />
       </>

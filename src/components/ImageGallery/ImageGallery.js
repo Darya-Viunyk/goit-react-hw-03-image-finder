@@ -1,12 +1,17 @@
 import { ImageGalleryItem } from './ImageGalleryItem';
 export const ImageGallery = ({ imeges }) => {
-  // const { id, webformatURL, largeImageURL } = this.state;
   return (
-    <ul>
+    <>
       {imeges.length > 0 &&
-        imeges.map(({ imeges }) => {
-          return <ImageGalleryItem />;
+        imeges.map(({ id, webformatURL, largeImageURL }) => {
+          return (
+            <ImageGalleryItem
+              id={id}
+              webformatURL={webformatURL}
+              largeImageURL={largeImageURL}
+            />
+          );
         })}
-    </ul>
+    </>
   );
 };
