@@ -1,8 +1,10 @@
 import { Component } from 'react';
+import ClipLoader from 'react-spinners/ClipLoader';
 import * as ItemApi from './ItemApi';
 import { Button } from './Button/Button';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Searchbar } from './Searchbar/Searchbar';
+import { Modal } from './Modal/Modal';
 
 export class App extends Component {
   state = {
@@ -11,40 +13,54 @@ export class App extends Component {
     imeges: [],
     isVisBle: false,
     isEmpty: false,
+    isLoading: false,
+    error: null,
   };
 
   onHandleSubmit = value => {
     this.setState({ query: value, page: 1, imeges: [], isEmpty: false });
   };
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(_, prevState) {
     const { query, page } = this.state;
     if (prevState.query !== query || prevState.page !== page) {
       this.getFotos(query, page);
     }
   }
-  getFotos = async (query, page) => {
-    const imeges = await ItemApi.getImages(query, page);
-    this.setState(prevState => {
-      return {
-        imeges: [...prevState.imeges, ...imeges],
-      };
-    });
-  };
   onButtonClick = () => {
     this.setState(prevState => ({
       page: prevState.page + 1,
     }));
   };
+  getFotos = async (query, page) => {
+    try {
+      this.setState({ isLoading: true, error: null });
+      const imeges = await ItemApi.getImages(query, page);
+      this.setState(prevState => {
+        return {
+          imeges: [...prevState.imeges, ...imeges.hits],
+        };
+      });
+    } catch (error) {
+      this.setState({
+        error: 'Oшибка, попробуйте еще раз!!',
+      });
+    } finally {
+      this.setState({ isLoading: false });
+    }
+  };
+
   render() {
-    const { imeges } = this.state;
+    const { imeges, error, isLoading } = this.state;
 
     return (
       <>
         <Searchbar onSubmit={this.onHandleSubmit} />
         {imeges.length > 0 && <ImageGallery imeges={imeges} />}
-
-        <Button onClick={this.onButtonClick} />
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+        <Modal imeges={imeges} />
+        {imeges.length > 0 && <Button onButtonClick={this.onButtonClick} />}
+        {isLoading && <ClipLoader />}
       </>
     );
   }

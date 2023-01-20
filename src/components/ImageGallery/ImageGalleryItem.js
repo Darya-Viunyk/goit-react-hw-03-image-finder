@@ -1,8 +1,8 @@
-export const ImageGalleryItem = ({ id, webformatURL, largeImageURL }) => {
+export const ImageGalleryItem = ({ webformatURL }) => {
   return (
     <>
-      <li key={id}>
-        <img src="" alt="" />
+      <li>
+        <img src={webformatURL} alt="img" />
       </li>
     </>
   );

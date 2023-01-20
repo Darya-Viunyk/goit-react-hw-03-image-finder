@@ -3,7 +3,7 @@ import { Component } from 'react';
 export class Searchbar extends Component {
   state = { query: '' };
   handleInput = event => {
-    this.setState({ query: event.currentTarget.value.toLowerCase().trim() });
+    this.setState({ query: event.currentTarget.value });
   };
   handleSubmit = event => {
     const { query } = this.state;
