@@ -4,7 +4,7 @@ import * as ItemApi from './ItemApi';
 import { Button } from './Button/Button';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Searchbar } from './Searchbar/Searchbar';
-import { Modal } from './Modal/Modal';
+
 
 export class App extends Component {
   state = {
@@ -58,7 +58,7 @@ export class App extends Component {
         <Searchbar onSubmit={this.onHandleSubmit} />
         {imeges.length > 0 && <ImageGallery imeges={imeges} />}
         {error && <p style={{ color: 'red' }}>{error}</p>}
-        <Modal imeges={imeges} />
+
         {imeges.length > 0 && <Button onButtonClick={this.onButtonClick} />}
         {isLoading && <ClipLoader />}
       </>

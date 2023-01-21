@@ -1,16 +1,24 @@
-import * as basicLightbox from 'basiclightbox';
+// import * as basicLightbox from 'basiclightbox';
 
-export const Modal = ({ largeImageURL }) => {
+export const Modal = ({ largeImageURL, onClose }) => {
   return (
     <>
       <div>
         <div>
           <img src={largeImageURL} alt="img" />
         </div>
+        <button type="button" onClick={onClose}>
+          Close
+        </button>
       </div>
     </>
   );
 };
+// const instance = basicLightbox.create(`
+//     <img src="assets/images/image.png" width="800" height="600">
+// `)
+
+// instance.show()
 // instance.show();
 
 // import React from 'react';
