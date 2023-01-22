@@ -3,34 +3,24 @@ import { Component } from 'react';
 
 export class ImageGalleryItem extends Component {
   state = {
-    showedModal: false,
+    isModalOpen: false,
   };
 
-  toggleModal = () => {
-    this.setState(prevState => {
-      return {
-        showedModal: !prevState.showedModal,
-      };
-    });
-  };
   openModal = webformatURL => {
-    this.satState({ isModalOpen: webformatURL });
-    this.toggleModal();
+    this.setState({ isModalOpen: true });
   };
-  closeModal = () => this.satState({ isModalOpen: false });
+  closeModal = () => this.setState({ isModalOpen: false });
   render() {
-    const { webformatURL, largeImageURL } = this.props;
+    const { webformatURL } = this.props;
     const { isModalOpen } = this.state;
     return (
       <>
         <li>
-          <img src={webformatURL} alt="img" onClick={this.toggleModal} />
+          <img src={webformatURL} alt="img" onClick={this.openModal} />
           {isModalOpen && (
-            <Modal
-              largeImageURL={largeImageURL}
-              onClose={this.closeModal}
-              toggleModal={this.toggleModal}
-            />
+            <Modal onClose={this.closeModal}>
+              <img src={this.props.largeImageURL} alt="img" />
+            </Modal>
           )}
         </li>
       </>

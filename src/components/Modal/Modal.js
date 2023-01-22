@@ -14,21 +14,19 @@ export class Modal extends Component {
 
   onKeydown = e => {
     if (e.code === 'Escape') {
-      this.props.toggleModal();
+      this.props.onClose();
     }
   };
   onClikOverlay = e => {
-    if (e.target !== e.currentTarget) return;
-
-    this.props.toggleModal();
+    if (e.target === e.currentTarget) {
+      this.props.onClose();
+    }
   };
   render() {
-    const { largeImageURL, onClikOverlay } = this.props;
+    // const { largeImageURL } = this.props;
     return createPortal(
-      <div className={style.modalBackdrop} onClick={onClikOverlay}>
-        <div className={style.modalContent}>
-          <img src={largeImageURL} alt="img" />
-        </div>
+      <div className={style.modalBackdrop} onClick={this.onClikOverlay}>
+        <div className={style.modalContent}>{this.props.children}</div>
       </div>,
       modalRoot
     );
