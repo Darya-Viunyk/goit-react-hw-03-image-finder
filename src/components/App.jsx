@@ -1,6 +1,8 @@
 import { Component } from 'react';
 import ClipLoader from 'react-spinners/ClipLoader';
 import * as ItemApi from './ItemApi';
+import './styles.css';
+
 import { Button } from './Button/Button';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Searchbar } from './Searchbar/Searchbar';
