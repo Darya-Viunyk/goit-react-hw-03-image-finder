@@ -1,5 +1,7 @@
 import { ImageGalleryItem } from './ImageGalleryItem';
 import styles from './ImageGallery.module.css';
+import PropTypes from 'prop-types';
+
 export const ImageGallery = ({ imeges }) => {
   return (
     <ul className={styles.imageGallery}>
@@ -14,4 +16,13 @@ export const ImageGallery = ({ imeges }) => {
       })}
     </ul>
   );
+};
+ImageGallery.propTypes = {
+  imeges: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      webformatURL: PropTypes.string.isRequired,
+      largeImageURL: PropTypes.string.isRequired,
+    }).isRequired
+  ).isRequired,
 };
